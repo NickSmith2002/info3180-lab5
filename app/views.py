@@ -65,6 +65,10 @@ def get_movies():
 def get_poster(filename):
     return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
 
+@app.route('/api/v1/csrf-token', methods=['GET'])
+def get_csrf():
+ return jsonify({'csrf_token': generate_csrf()})
+
 ###
 # The functions below should be applicable to all Flask apps.
 ###
