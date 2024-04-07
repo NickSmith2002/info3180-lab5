@@ -21,7 +21,7 @@ import os
 def index():
     return jsonify(message="This is the beginning of our API")
 
-@app.route('api/v1/movies', methods=['POST'])
+@app.route('/api/v1/movies', methods=['POST'])
 def movies():
     form = MovieForm()
 
