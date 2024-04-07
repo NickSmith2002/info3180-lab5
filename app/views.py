@@ -37,11 +37,9 @@ def movies():
         poster.save(os.path.join(UPLOAD_FOLDER, filename))
 
         movie = Movie(title=title, description=description, poster=filename if poster else None)
-
         db.session.add(movie)
         db.session.commit()
 
-        #Success message is returned to users if the movie is added
         response = {
             'message': 'Movie Successfully added',
             'title': movie.title,
@@ -53,6 +51,12 @@ def movies():
     errors = form_errors(form)
     return jsonify(errors=errors), 400
 
+#Returns movie posters
+@app.route('/api/v1/posters/<filename>', methods=['GET'])
+def get_poster(filename):
+    return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
+
+#Returns list of all movies
 @app.route('/api/v1/movielist', methods=['GET'])
 def get_movies():
     movies = Movie.query.all()
@@ -61,9 +65,6 @@ def get_movies():
                                 'description': movie.description,
                                 'poster': f"/api/v1/posters/{movie.poster}"} for movie in movies]})
 
-@app.route('/api/v1/posters/<filename>', methods=['GET'])
-def get_poster(filename):
-    return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
 
 @app.route('/api/v1/csrf-token', methods=['GET'])
 def get_csrf():
